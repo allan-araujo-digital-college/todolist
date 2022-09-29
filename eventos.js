@@ -4,30 +4,26 @@ function atualizarQuantidade() {
     document.getElementById('numeros').innerHTML = lista_tarefas.length;
 }
 
+async function listarTarefas() {
+    // async await
+    let response = await fetch('https://62a4da7d47e6e4006399353b.mockapi.io/v1/tarefas1')
+    let body = await response.json()
+    if (typeof body !== "string") {
+        let conteudo = body
+            .map(function (tarefa) {
+                return tarefa.titulo;
+            })
+            .sort()
+            .map(function (tarefa) {
+                return `
+                        <div>
+                            <input type="checkbox"> ${tarefa}
+                        </div>
+                    `;
+            });
 
-function listarTarefas() {
-    fetch('https://62a4da7d47e6e4006399353b.mockapi.io/v1/tarefas1')
-        .then(function (resposta) {
-            return resposta.json();
-        })
-        .then(function (resposta) {
-            if (typeof resposta !== "string") {
-                let conteudo = resposta
-                    .map(function (tarefa) {
-                        return tarefa.titulo;
-                    })
-                    .sort()
-                    .map(function (tarefa) {
-                        return `
-                            <div>
-                                <input type="checkbox"> ${tarefa}
-                            </div>
-                        `;
-                    });
-
-                document.getElementById('tarefas').innerHTML = conteudo.join('');
-            }
-        })
+        document.getElementById('tarefas').innerHTML = conteudo.join('');
+    }
 }
 
 function addTarefa() {
@@ -39,6 +35,7 @@ function addTarefa() {
         alert('Tarefa invalida');
         return;
     }
+
 
     fetch('https://62a4da7d47e6e4006399353b.mockapi.io/v1/tarefas1', {
         method: "POST",
