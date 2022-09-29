@@ -5,24 +5,35 @@ function atualizarQuantidade() {
 }
 
 async function listarTarefas() {
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('erro').style.display = 'none';
     // async await
-    let response = await fetch('https://62a4da7d47e6e4006399353b.mockapi.io/v1/tarefas1')
-    let body = await response.json()
-    if (typeof body !== "string") {
-        let conteudo = body
-            .map(function (tarefa) {
-                return tarefa.titulo;
-            })
-            .sort()
-            .map(function (tarefa) {
-                return `
+    try {
+        let response = await fetch('https://62a4da7d47e6e4006399353b.mockapi.io/v1/tarefas1')
+        let body = await response.json()
+        if (typeof body !== "string") {
+            let conteudo = body
+                .map(function (tarefa) {
+                    return tarefa.titulo;
+                })
+                .sort()
+                .map(function (tarefa) {
+                    return `
                         <div>
                             <input type="checkbox"> ${tarefa}
                         </div>
                     `;
-            });
+                });
 
-        document.getElementById('tarefas').innerHTML = conteudo.join('');
+            document.getElementById('tarefas').innerHTML = conteudo.join('');
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('erro').style.display = 'none';
+        }else{
+            document.getElementById('erro').style.display = 'block';
+        }
+    } catch (error) {
+        document.getElementById('erro').style.display = 'block';
+        document.getElementById('loading').style.display = 'none';
     }
 }
 
